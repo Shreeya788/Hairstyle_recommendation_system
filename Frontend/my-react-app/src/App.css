@@ -1,0 +1,10 @@
+ /* <uniquifier>: Use a unique and descriptive class name */
+ /* <weight>: Use a value from 100 to 900 */
+
+.inter-SemiBold {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+  font-variation-settings: "slnt" 0;
+}
