@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hairstyle Recommendations</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      h2 {
+        color: #2c3e50;
+      }
+      .info {
+        background-color: #f4f4f4;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+      }
+      .recommendations {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+      }
+      .recommendation-item {
+        text-align: center;
+      }
+      .recommendation-item img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 5px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Your Hairstyle Recommendations</h2>
+    <div class="info">
+      <p><strong>Face Shape:</strong> {{ face_shape }}</p>
+      <p><strong>Hair Length:</strong> {{ hair_length }}</p>
+    </div>
+    <h3>Recommended Styles:</h3>
+    <div class="recommendations">
+      {% for style in recommended_styles %}
+      <div class="recommendation-item">
+        <img
+          src="{% get_media_prefix %}{{ style }}"
+          alt="Recommended Hairstyle"
+        />
+        <p>Style {{ forloop.counter }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </body>
+</html>
