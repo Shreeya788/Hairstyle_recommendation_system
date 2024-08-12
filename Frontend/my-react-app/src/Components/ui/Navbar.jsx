@@ -1,12 +1,42 @@
-import logo from "../../assets/logo.png";
-import { NavLink } from "react-router-dom";
 import { useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import logo from "../../assets/logo.png";
+import UserToggle from "./UserToggle";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
   const handleToggle = () => {
     setIsOpen(!isOpen);
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
+
+  const renderAuthButtons = () => {
+    if (user) {
+      return <UserToggle user={user} logout={handleLogout} />;
+    } else {
+      return (
+        <>
+          <NavLink to="/signIn">
+            <button className="font-semibold font-sans text-[#0D0D0D] opacity-70 px-4 py-2 rounded-md hover:bg-neutral-100">
+              Sign In
+            </button>
+          </NavLink>
+          <NavLink to="/signUp">
+            <button className="bg-[#2463EB] text-white px-4 py-2 rounded-md hover:bg-[#3772f2]">
+              Sign Up
+            </button>
+          </NavLink>
+        </>
+      );
+    }
   };
 
   return (
@@ -47,18 +77,7 @@ const Navbar = () => {
             </NavLink>
           </div>
         </div>
-        <div className="hidden md:flex space-x-4">
-          <NavLink to="/signIn">
-            <button className="font-semibold font-sans text-[#0D0D0D] opacity-70 px-4 py-2 rounded-md hover:bg-neutral-100">
-              Sign In
-            </button>
-          </NavLink>
-          <NavLink to="/signUp">
-            <button className="bg-[#2463EB] text-white px-4 py-2 rounded-md hover:bg-[#3772f2]">
-              Sign Up
-            </button>
-          </NavLink>
-        </div>
+        <div className="hidden md:flex space-x-4">{renderAuthButtons()}</div>
         <div className="md:hidden flex items-center">
           <button onClick={handleToggle} className="focus:outline-none">
             <svg
@@ -114,16 +133,35 @@ const Navbar = () => {
             >
               Recommendation
             </NavLink>
-            <NavLink to="/signIn" onClick={handleToggle}>
-              <button className="text-gray-800 text-center font-semibold hover:text-blue-600">
-                Sign In
-              </button>
-            </NavLink>
-            <NavLink to="/signUp" onClick={handleToggle}>
-              <button className="text-gray-800 text-center font-semibold hover:text-blue-600">
-                Sign Up
-              </button>
-            </NavLink>
+            {user ? (
+              <>
+                <span className="text-gray-800 text-center font-semibold">
+                  {user.username}
+                </span>
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    handleToggle();
+                  }}
+                  className="text-gray-800 text-center font-semibold hover:text-blue-600"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <NavLink to="/signIn" onClick={handleToggle}>
+                  <button className="text-gray-800 text-center font-semibold hover:text-blue-600">
+                    Sign In
+                  </button>
+                </NavLink>
+                <NavLink to="/signUp" onClick={handleToggle}>
+                  <button className="text-gray-800 text-center font-semibold hover:text-blue-600">
+                    Sign Up
+                  </button>
+                </NavLink>
+              </>
+            )}
           </div>
         </div>
       )}

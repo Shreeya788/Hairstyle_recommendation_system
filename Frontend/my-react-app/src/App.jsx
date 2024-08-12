@@ -6,19 +6,25 @@ import Recommendations from "./Pages/Recommendations";
 
 import "./App.css";
 import SignInForm from "./Components/ui/SignInForm";
+import { AuthProvider } from "./context/AuthContext";
+import { UserProvider } from "./context/UserContext";
 
 const App = () => {
   return (
     <div className="">
-      <Router>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/signIn" element={<SignInForm />} />
-          <Route path="/signUp" element={<SignUpForm />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/recommendations" element={<Recommendations />} />
-        </Routes>
-      </Router>
+      <AuthProvider>
+        <UserProvider>
+          <Router>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/signIn" element={<SignInForm />} />
+              <Route path="/signUp" element={<SignUpForm />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/recommendations" element={<Recommendations />} />
+            </Routes>
+          </Router>
+        </UserProvider>
+      </AuthProvider>
     </div>
   );
 };

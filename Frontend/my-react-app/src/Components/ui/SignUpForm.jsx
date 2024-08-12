@@ -1,7 +1,43 @@
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import sidephoto from "../../assets/singupPhoto.png";
-import { Link } from "react-router-dom";
 
 const SignUpForm = () => {
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords don't match");
+      return;
+    }
+    try {
+      const response = await axios.post("http://localhost:8000/api/register/", {
+        username: formData.username,
+        email: formData.email,
+        password: formData.password,
+      });
+      console.log("Registration successful:", response.data);
+      navigate("/signIn"); // Redirect to login page after successful registration
+    } catch (err) {
+      setError(
+        err.response?.data?.message || "An error occurred during registration"
+      );
+    }
+  };
+
   return (
     <div className="w-full h-full flex items-center justify-center mt-14 px-4 md:px-0">
       <div className="text-white w-full md:w-[80%] h-full md:h-[80%] rounded-lg">
@@ -18,58 +54,71 @@ const SignUpForm = () => {
               <p className="text-black mt-8 md:mt-20 text-2xl md:text-3xl mb-3 font-semibold">
                 Sign Up
               </p>
-              <form className="space-y-4">
+              {error && <p className="text-red-500 mb-4">{error}</p>}
+              <form className="space-y-4" onSubmit={handleSubmit}>
                 <div>
                   <label
-                    htmlFor="Username"
+                    htmlFor="username"
                     className="block mb-2 text-[#666666]"
                   >
                     Username
                   </label>
                   <input
                     type="text"
+                    name="username"
                     placeholder="Username"
                     required
-                    className="w-full md:w-[70%] text-[#cac6c6] h-10 appearance-none border rounded px-3 shadow-none"
+                    className="w-full md:w-[70%] text-[#666666] h-10 appearance-none border rounded px-3 shadow-none"
+                    value={formData.username}
+                    onChange={handleChange}
                   />
                 </div>
                 <div>
-                  <label htmlFor="Email" className="block mb-2 text-[#666666]">
+                  <label htmlFor="email" className="block mb-2 text-[#666666]">
                     Email address
                   </label>
                   <input
                     type="email"
+                    name="email"
                     placeholder="Email"
                     required
-                    className="w-full md:w-[70%] text-[#cac6c6] h-10 appearance-none border rounded px-3 shadow-none"
+                    className="w-full md:w-[70%] text-[#666666] h-10 appearance-none border rounded px-3 shadow-none"
+                    value={formData.email}
+                    onChange={handleChange}
                   />
                 </div>
                 <div>
                   <label
-                    htmlFor="Password"
+                    htmlFor="password"
                     className="block mb-2 text-[#666666]"
                   >
                     Your Password
                   </label>
                   <input
                     type="password"
+                    name="password"
                     placeholder="Password"
                     required
                     className="w-full md:w-[70%] text-[#666666] h-10 appearance-none border rounded px-3 shadow-none"
+                    value={formData.password}
+                    onChange={handleChange}
                   />
                 </div>
                 <div>
                   <label
-                    htmlFor="ConfirmPassword"
+                    htmlFor="confirmPassword"
                     className="block mb-2 text-[#666666]"
                   >
                     Confirm Password
                   </label>
                   <input
                     type="password"
+                    name="confirmPassword"
                     placeholder="Confirm Password"
                     required
                     className="w-full md:w-[70%] text-[#666666] h-10 appearance-none border rounded px-3 shadow-none"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
                   />
                 </div>
                 <button
