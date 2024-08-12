@@ -2,4 +2,6 @@ venv
 dlib-19.24.1-cp311-cp311-win_amd64.whl
 node_modules
 data
+db.sqlite3
+
 
